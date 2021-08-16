@@ -1,0 +1,25 @@
+{
+    "name": "rasclatt/api",
+    "type": "library",
+    "description": "Class Library For the Nubersoft API Service",
+    "keywords": ["Nubersoft","API","framework","mlm"],
+    "homepage": "https://github.com/rasclatt/api",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ryan Rayner",
+            "email": "rasclatt@me.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.2",
+        "rasclatt/nubersoft": "1.*",
+        "rasclatt/smart-dto": "*"
+    },
+    "autoload": {
+		"psr-4": {
+			"Nubersoft\\": "src/"
+		}
+	}
+}
