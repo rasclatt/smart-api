@@ -7,6 +7,8 @@ class App implements \SmartApi\Interfaces\App\ISetUp
 
     public function execute($request)
     {
+        if(!function_exists('apache_request_headers'))
+            include_once(__DIR__.DS.'..'.DS.'functions'.DS.'apache_request_headers.php');
         $this->request = $request;
         $this->headers = array_change_key_case(apache_request_headers(), CASE_LOWER);
         $this->contentType = ($this->headers['content-type'])?? 'application/json';
