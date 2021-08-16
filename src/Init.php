@@ -1,5 +1,5 @@
 <?php
-namespace Nubersoft\Api;
+namespace SmartApi;
 
 abstract class Init
 {

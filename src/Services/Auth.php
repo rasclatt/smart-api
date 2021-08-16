@@ -1,9 +1,9 @@
 <?php
-namespace Nubersoft\Api\Services;
+namespace SmartApi\Services;
 
-use \Nubersoft\Api\Dto\Services\Auth\GetUserTokenRequest;
+use \SmartApi\Dto\Services\Auth\GetUserTokenRequest;
 
-class Auth extends \Nubersoft\Api\Init
+class Auth extends \SmartApi\Init
 {
     private $JWT;
     /**
@@ -21,7 +21,7 @@ class Auth extends \Nubersoft\Api\Init
     protected function getUserToken(GetUserTokenRequest $request)
     {
         if(empty($request->distid))
-            throw new \Nubersoft\Api\Exception('Member/Distributor Id is required.', 500);
+            throw new \SmartApi\Exception('Member/Distributor Id is required.', 500);
 
         return [
             'jwt_token' => $this->JWT->create([

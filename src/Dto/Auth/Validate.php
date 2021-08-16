@@ -1,5 +1,5 @@
 <?php
-namespace Nubersoft\Api\Dto\Auth;
+namespace SmartApi\Dto\Auth;
 
 class Validate extends \SmartDto\Dto
 {

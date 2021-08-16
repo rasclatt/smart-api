@@ -1,6 +1,6 @@
 <?php
-namespace Nubersoft\Api\Models;
+namespace SmartApi\Models;
 
-class ErrorHandler extends \Nubersoft\Api\ErrorHandler
+class ErrorHandler extends \SmartApi\ErrorHandler
 {
 }

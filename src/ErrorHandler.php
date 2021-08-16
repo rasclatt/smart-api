@@ -1,7 +1,7 @@
 <?php
-namespace Nubersoft\Api;
+namespace SmartApi;
 
-abstract class ErrorHandler implements \Nubersoft\Api\Interfaces\IErrorHandler
+abstract class ErrorHandler implements \SmartApi\Interfaces\IErrorHandler
 {
     private $initFunction, $type;
     /**

@@ -1,5 +1,5 @@
 {
-    "name": "rasclatt/api",
+    "name": "rasclatt/smart-api",
     "type": "library",
     "description": "Class Library For the Nubersoft API Service",
     "keywords": ["Nubersoft","API","framework","mlm"],
@@ -19,7 +19,7 @@
     },
     "autoload": {
 		"psr-4": {
-			"Nubersoft\\": "src/"
+			"SmartApi\\": "src/"
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-namespace Nubersoft\Api\Interfaces;
+namespace SmartApi\Interfaces;
 
 interface iErrorHandler
 {

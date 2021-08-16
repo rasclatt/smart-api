@@ -1,12 +1,12 @@
 <?php
-namespace Nubersoft\Api;
+namespace SmartApi;
 
-use \Nubersoft\Api\Models\ {
+use \SmartApi\Models\ {
     App as SetUp
 };
 
-use \Nubersoft\Api\ErrorHandler as IErrorHandler;
-use \Nubersoft\Api\Dto\App\Init\Request as InitRequest;
+use \SmartApi\ErrorHandler as IErrorHandler;
+use \SmartApi\Dto\App\Init\Request as InitRequest;
 use \Nubersoft\nReflect;
 
 class App

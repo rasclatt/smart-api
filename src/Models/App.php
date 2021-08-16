@@ -1,7 +1,7 @@
 <?php
-namespace Nubersoft\Api\Models;
+namespace SmartApi\Models;
 
-class App implements \Nubersoft\Api\Interfaces\App\ISetUp
+class App implements \SmartApi\Interfaces\App\ISetUp
 {
     public $headers, $contentType, $request;
 

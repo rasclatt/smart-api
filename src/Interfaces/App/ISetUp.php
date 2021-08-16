@@ -1,5 +1,5 @@
 <?php
-namespace Nubersoft\Api\Interfaces\App;
+namespace SmartApi\Interfaces\App;
 
 interface ISetUp
 {

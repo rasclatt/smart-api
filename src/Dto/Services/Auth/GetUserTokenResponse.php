@@ -1,5 +1,5 @@
 <?php
-namespace Nubersoft\Api\Dto\Services\Auth;
+namespace SmartApi\Dto\Services\Auth;
 
 class GetUserTokenResponse extends \SmartDto\Dto
 {

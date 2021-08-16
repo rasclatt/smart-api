@@ -1,5 +1,5 @@
 <?php
-namespace Nubersoft\Api\Dto\App\Init;
+namespace SmartApi\Dto\App\Init;
 
 class Request extends \SmartDto\Dto
 {
@@ -15,14 +15,14 @@ class Request extends \SmartDto\Dto
         $service = ($array['service'])?? false;
         
         if(strpos($service, '.') === false)
-            throw new \Nubersoft\Api\Exception('Invalid service', 500);
+            throw new \SmartApi\Exception('Invalid service', 500);
 
         $service = array_filter(array_map(function($v) {
             return preg_replace('/[^A-Z]/i', '', $v);
         }, explode('.', $service)));
         
         if(count($service) != 2)
-            throw new \Nubersoft\Api\Exception('Invalid service', 500);
+            throw new \SmartApi\Exception('Invalid service', 500);
 
         $array['class_name'] = $service[0];
         $array['class'] = "\\Nubersoft\\Api\\Services\\{$service[0]}";

@@ -1,11 +1,11 @@
 <?php
-namespace Nubersoft\Api\Models;
+namespace SmartApi\Models;
 
-use \Nubersoft\Api\ {
+use \SmartApi\ {
     Interfaces\IAuth
 };
 
-use \Nubersoft\Api\Dto\ {
+use \SmartApi\Dto\ {
     Auth\Validate
 };
 

@@ -1,14 +1,14 @@
 <?php
-namespace Nubersoft\Api\Models\Auth;
+namespace SmartApi\Models\Auth;
 
-use \Nubersoft\Api\Interfaces\IAuth;
+use \SmartApi\Interfaces\IAuth;
 use \Nubersoft\JWTFactory;
 
-use \Nubersoft\Api\Dto\ {
+use \SmartApi\Dto\ {
     Auth\Validate
 };
 
-class JWT extends \Nubersoft\Api\Models\Auth
+class JWT extends \SmartApi\Models\Auth
 {
     public static $jwt;
     /**
@@ -37,20 +37,20 @@ class JWT extends \Nubersoft\Api\Models\Auth
             $data = $Jwt->get($this->Validate->apikey);
             # If from the back office directly
             if(!empty($data['unique_name'])) {
-                \Nubersoft\Api\App::$request['distid'] = ($data['sub'])?? null;
-                if(!\Nubersoft\Api\App::$request['distid'])
+                \SmartApi\App::$request['distid'] = ($data['sub'])?? null;
+                if(!\SmartApi\App::$request['distid'])
                     return false;
-                \Nubersoft\Api\App::$request['distid']    =   (int) \Nubersoft\Api\App::$request['distid'];
+                \SmartApi\App::$request['distid']    =   (int) \SmartApi\App::$request['distid'];
                 return true;
             }
             # See if it's a member call
             else {
-                \Nubersoft\Api\App::$request['distid'] = ($data['Member'])?? null;
-                return (!empty(\Nubersoft\Api\App::$request['distid']));
+                \SmartApi\App::$request['distid'] = ($data['Member'])?? null;
+                return (!empty(\SmartApi\App::$request['distid']));
             }
         }
         catch (\Exception $e) {
-            throw new \Nubersoft\Api\Exception('Token is invalid', 403);
+            throw new \SmartApi\Exception('Token is invalid', 403);
         }
     }
 }
