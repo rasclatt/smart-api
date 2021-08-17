@@ -50,7 +50,7 @@ class JWT extends \SmartApi\Models\Auth
             }
         }
         catch (\Exception $e) {
-            throw new \SmartApi\Exception('Token is invalid', 403);
+            return false;
         }
     }
 }
