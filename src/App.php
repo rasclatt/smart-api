@@ -121,7 +121,7 @@ class App
                 throw new Exception('Invalid API credentials', 403);
             }
             # If valid but the service is not built properly
-            elseif(!($obj instanceof \Api\Init)) {
+            elseif(!($obj instanceof \SmartApi\Init)) {
                 throw new Exception('Services is broken', 500);
             }
             # Run the listener for this object
