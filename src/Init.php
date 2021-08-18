@@ -15,7 +15,7 @@ abstract class Init
         $Reflect = new \ReflectionObject($this);
 
         if(!$Reflect->getMethod($method)->isProtected())
-            throw new \SmartApi\Exception('Serive is invalid.', 403);
+            throw new \SmartApi\Exception('Service is not reachable.', 403);
 
         return $this->{$method}($this->request);
     }
