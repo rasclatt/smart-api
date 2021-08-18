@@ -1,6 +1,8 @@
 <?php
 namespace SmartApi;
 
+use \SmartDto\Dto;
+
 use \SmartApi\Models\ {
     App as SetUp
 };
@@ -181,7 +183,7 @@ class App
      */
     public function format($data)
     {
-        if($data instanceof $this) {
+        if($data instanceof Dto) {
             switch($this->getReturnType()) {
                 case('c'):
                     return $data->toCamelCase();
