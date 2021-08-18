@@ -175,4 +175,24 @@ class App
             $method
         ]));
     }
+    /**
+     *	@description	Formats the return keys of the object
+     *	@param	[any|SmartDto\Dto]
+     */
+    public function format($data)
+    {
+        if($data instanceof $this) {
+            switch($this->getReturnType()) {
+                case('c'):
+                    return $data->toCamelCase();
+                case('p'):
+                    return $data->toPascalCase();
+                default:
+                    return $data->toArray();
+            }
+        }
+        else {
+            return $data;
+        }
+    }
 }
