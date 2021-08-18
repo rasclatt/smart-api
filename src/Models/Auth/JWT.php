@@ -12,8 +12,7 @@ class JWT extends \SmartApi\Models\Auth
 {
     public static $jwt;
     /**
-     *	@description	
-     *	@param	
+     *	@description	Setu up the validator
      */
     public function __construct(
         Validate $Validate
@@ -22,8 +21,7 @@ class JWT extends \SmartApi\Models\Auth
         $this->Validate = $Validate;
     }
     /**
-     *	@description	
-     *	@param	
+     *	@description	Determines if a jwt token is availabe and valid
      */
     public function validate(): bool
     {
