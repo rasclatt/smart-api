@@ -30,24 +30,13 @@ class JWT extends \SmartApi\Models\Auth
         try {
             # Fetch the JWT and set the default attributes
             $Jwt = JWTFactory::get();
-            $Jwt->setAttr('aud', 'api.backoffice')
-                ->setAttr('iss', 'api.beyond');
+            $Jwt->setAttr('aud', $_SERVER['HTTP_HOST'])
+                ->setAttr('iss', $_SERVER['HTTP_HOST']);
             # Store the token data
             self::$jwt = 
             $data = $Jwt->get($this->Validate->apikey);
-            # If from the back office directly
-            if(!empty($data['unique_name'])) {
-                \SmartApi\App::$request['distid'] = ($data['sub'])?? null;
-                if(!\SmartApi\App::$request['distid'])
-                    return false;
-                \SmartApi\App::$request['distid']    =   (int) \SmartApi\App::$request['distid'];
-                return true;
-            }
-            # See if it's a member call
-            else {
-                \SmartApi\App::$request['distid'] = ($data['Member'])?? null;
-                return (!empty(\SmartApi\App::$request['distid']));
-            }
+            \SmartApi\App::$request['member'] = ($data['member'])?? null;
+            return (!empty(\SmartApi\App::$request['member']));
         }
         catch (\Exception $e) {
             return false;
