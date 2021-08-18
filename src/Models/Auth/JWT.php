@@ -1,14 +1,16 @@
 <?php
 namespace SmartApi\Models\Auth;
 
-use \SmartApi\Interfaces\IAuth;
-use \Nubersoft\JWTFactory;
-
+use \SmartApi\ {
+    Interfaces\IAuth,
+    Models\Auth as AuthModel
+};
 use \SmartApi\Dto\ {
     Auth\Validate
 };
+use \Nubersoft\JWTFactory;
 
-class JWT extends \SmartApi\Models\Auth
+class JWT extends AuthModel
 {
     public static $jwt;
     /**
