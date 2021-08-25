@@ -146,7 +146,7 @@ class App
     {
         $details = new \ReflectionObject($obj);
         $methodDetails = $details->getMethod($method);
-        return $methodDetails->isPublic();
+        return $methodDetails->isPublic() && !$methodDetails->isFinal();
     }
     /**
      *	@description	Set the path where API services are located
