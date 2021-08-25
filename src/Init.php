@@ -13,8 +13,8 @@ abstract class Init
         $this->request = $request;
 
         $Reflect = new \ReflectionObject($this);
-
-        if(!$Reflect->getMethod($method)->isProtected())
+        # Disallow protected and final types
+        if(!$Method->isProtected() || $Method->isFinal())
             throw new \SmartApi\Exception('Service is not reachable.', 403);
 
         return $this->{$method}($this->request);
