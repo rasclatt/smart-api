@@ -28,9 +28,9 @@ try {
     # Set default return keys as camel case
     App::$responseType = 'c';
     # Create an alternate override folder for calling data
-    App::addCoreClass('\\Beyond');
+    App::addCoreClass('\\SomeClass');
     # Create an alternate override folder for calling data
-    App::addCoreDtoClass('\\Beyond');
+    App::addCoreDtoClass('\\SomeDtoClass');
     # Start API
     $Api = new App();
     # Set up the response headers and fetch the bearer
