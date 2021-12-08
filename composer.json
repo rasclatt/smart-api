@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=7.2",
-        "rasclatt/nubersoft": "1.*",
+        "rasclatt/nubersoft": "*",
         "rasclatt/smart-dto": "*"
     },
     "autoload": {
