@@ -33,7 +33,7 @@ class Constructor extends \SmartDto\Dto
                 throw new \SmartApi\Exception('Invalid request type. Can only pass POST, GET, PATCH, PUT, and DELETE', 403);
         }
         $arr['body'] = [];
-        $arr['service'] = $_SERVER['PATH_INFO']?? null;
+        $arr['service'] = $_SERVER['PATH_INFO']?? $_SERVER['REQUEST_URI'];
         if(empty($arr['service'])) {
             $exp = implode('/', array_filter(array_map(function($v) {
                 # Don't relace if input is empty
