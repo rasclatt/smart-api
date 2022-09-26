@@ -34,11 +34,14 @@ class Constructor extends \SmartDto\Dto
         }
         $arr['body'] = [];
         $arr['service'] = $_SERVER['PATH_INFO']?? null;
-
         if(empty($arr['service'])) {
             $exp = implode('/', array_filter(array_map(function($v) {
-                return preg_replace('/[^\d\A-Z_-]/i','', $v);
-            }, explode('/', str_replace('api.php', '',$_SERVER['PHP_SELF'])))));
+                # Don't relace if input is empty
+                if(empty($v))
+                    return '';
+                return preg_replace('![^\d\A-Z_-]!i', '', $v);
+
+            }, explode('/', str_replace('api.php', '', $_SERVER['PHP_SELF'])))));
             $arr['service'] = $exp;
         }
         # Process the user input data
