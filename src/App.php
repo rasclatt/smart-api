@@ -2,13 +2,16 @@
 namespace SmartApi;
 
 use \SmartDto\Dto;
-
-use \SmartApi\Models\ {
-    App as SetUp
+use \SmartApi\ {
+    Models\App as SetUp
 };
-
 use \SmartApi\ErrorHandler as IErrorHandler;
-use \SmartApi\Dto\App\Init\Request as InitRequest;
+use \SmartApi\Dto\App\ {
+    Init\Request as InitRequest,
+    InitRest\Request as InitRestRequest
+};
+use \SmartApi\Dto\Request\Input\Constructor as ConstructorRequest;
+use \SmartApi\Request as Request;
 use \Nubersoft\nReflect;
 
 class App
@@ -17,8 +20,14 @@ class App
     public static $responseType = 'php';
     # Storage of the request
     public static $request;
+    # Storage of the permissions
+    public static ?\SmartApi\Dto\App\Permission $permission;
+    # Storage of the request Dto
+    public static \SmartApi\Dto\Request\Input\Constructor $dto;
     # Allow adding to headers
     public $headers;
+    # Allow controllers to pass
+    public static array $controllers = [];
     # Storage for the authenticator objects
     private $Auth;
     # Set an alternate core class (string)
@@ -30,8 +39,14 @@ class App
      */
     public function setUp(SetUp $Setup, IErrorHandler $ErrorHandler = null): SetUp
     {
+        $input = file_get_contents("php://input");
+        # Create a Request DTO
+        # NOTE: The ConstructorRequest DTO checks the type of request being made
+        new Request(new ConstructorRequest(['input' => $input]));
+        # Store the request data
+        self::$dto = Request::get();
         # Convert the post
-        self::$request = $Setup->execute(file_get_contents("php://input"));
+        self::$request = $Setup->execute($input);
         # Set the error handler
         if(!empty($ErrorHandler))
             $ErrorHandler->start();
@@ -109,8 +124,8 @@ class App
         $dtoStringReq = $this->classNameCompile($core_service, $dtoClass, $dtoMethod).'Request';
         $dtoStringResp = $this->classNameCompile($core_service, $dtoClass, $dtoMethod).'Response';
         # See if the DTOs are available
-        $dtoExistsReq  =   class_exists($dtoStringReq);
-        $dtoExistsResp  =   class_exists($dtoStringResp);
+        $dtoExistsReq = class_exists($dtoStringReq);
+        $dtoExistsResp = class_exists($dtoStringResp);
         # See if this requires authentication to access
         $isPublic = $this->isPublic($obj, $service->method);
         # Run the public function if available
@@ -133,6 +148,69 @@ class App
         return ($dtoExistsResp)? new $dtoStringResp($run) : $run;
     }
     /**
+     *	@description	Main API call
+     *  @request mapping    GET = Object->get()
+     *                      POST = Object->save()
+     *                      PATCH = Object->update()
+     *                      DELETE = Object->delete()
+     *                      PUT = Object->upload()
+     *                      * Services determined in "ConstructorRequest" DTO
+     * @instructions    Service classes need to use these methods for the API to automatically map the service
+     */
+    public function initRest()
+    {
+        # Call is not valid by default
+        $valid = false;
+        # Loop through all the authenticators
+        foreach ($this->Auth as $authenticator) {
+            # Stop if not an authenticator
+            if(!($authenticator instanceof Interfaces\IAuth)) {
+                throw new Exception('Authenticator must be instance of Api\IAuth', 500);
+            }
+            # Stop and mark true if valid
+            if($authenticator->validate()) {
+                # Set to valid
+                $valid = true;
+                break;
+            }
+        }
+        # Create an init request
+        $service = new InitRestRequest(self::$request);
+        # Check for valid request class
+        if(!class_exists($service->class))
+        throw new Exception('Invalid service', 404);
+        # Create the instance
+        $obj = (isset($obj))? $obj : nReflect::instantiate($service->class);
+        # Create request and response DTO paths
+        $dtoStringReq = $service->dto_path.'\\Request';
+        $dtoStringResp = $service->dto_path.'\\Response';
+        # See if the DTOs are available
+        $dtoExistsReq = class_exists($dtoStringReq);
+        $dtoExistsResp = class_exists($dtoStringResp);
+        # See if this requires authentication to access
+        $isPublic = $this->isPublic($obj, $service->method);
+        # Convert to array
+        $dataStore = $service->toArray()['dto'];
+        # Run the public function if available
+        if($isPublic) {
+            $run = $obj->{$service->method}($dtoExistsReq? new $dtoStringReq($dataStore) : $dataStore);
+        }
+        else {
+            # Stop if not validated to see the authenticated service
+            if(!$valid) {
+                throw new Exception('Invalid API credentials', 403);
+            }
+            # If valid but the service is not built properly
+            elseif(!($obj instanceof \SmartApi\Init)) {
+                throw new Exception('Services is broken', 500);
+            }
+            # Run the listener for this object for protected (client logged in) and final (admin)
+            $run = $obj->listen($service->method, ($dtoExistsReq? new $dtoStringReq($dataStore) : $dataStore));
+        }
+        # Return the response
+        return ($dtoExistsResp)? new $dtoStringResp($run) : $run;
+    }
+    /**
      *	@description	Determines the response type of the key returns
      */
     public function getReturnType(): string
@@ -144,6 +222,11 @@ class App
      */
     private function isPublic(object $obj, string $method): bool
     {
+        # Check that the method exists
+        if(!method_exists($obj, $method)) {
+            throw new \SmartApi\Exception('Invalid service name: '.strip_tags($method), 404);
+        }
+        # Start analysing
         $details = new \ReflectionObject($obj);
         $methodDetails = $details->getMethod($method);
         return $methodDetails->isPublic() && !$methodDetails->isFinal();
