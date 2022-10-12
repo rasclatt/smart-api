@@ -10,6 +10,8 @@ use \SmartApi\ {
 abstract class Init implements IInit
 {
     protected $request;
+
+    public static array $matches = [ 'local' ];
     /**
      *	@description	
      */
@@ -71,9 +73,12 @@ abstract class Init implements IInit
     /**
      *	@description	Error toggling based on the local status of the host name
      */
-    public static function errorToggle()
+    public static function errorToggle(bool $report = false)
     {
         error_reporting(E_ALL);
-        ini_set('display_errors', (stripos($_SERVER['HTTP_HOST'], 'local') !== false)? 1 : 0);
+        $code = (preg_match('/' . implode('|', self::$matches) . '/', $_SERVER['HTTP_HOST']))? 1 : 0;
+        if($report)
+            throw new \SmartApi\Exception("Current reporting mode is {$code} -> error reporting is ".(($code == 1)? 'on' : 'off'), 200);
+        ini_set('display_errors', $code);
     }
 }
