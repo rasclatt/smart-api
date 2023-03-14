@@ -47,8 +47,12 @@ class Constructor extends \SmartDto\Dto
         # Process the user input data
         if(!empty($array['input'])) {
             $strArr = [];
-            parse_str($array['input'], $strArr);
-            $arr['body'] = $strArr;
+            if($_SERVER['CONTENT_TYPE'] == 'application/json') {
+                $arr['body'] = is_string($array['input'])? json_decode($array['input'], 1) : $array['input'];
+            } else {
+                parse_str($array['input'], $strArr);
+                $arr['body'] = $strArr;
+            }
         }
         # Process the query string attributes
         if(!empty($_SERVER['QUERY_STRING'])) {
