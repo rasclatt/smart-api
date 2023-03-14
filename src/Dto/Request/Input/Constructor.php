@@ -5,6 +5,7 @@ class Constructor extends \SmartDto\Dto
 {
     public string $service;
     public string $action = 'get';
+    public string $type = 'get';
     public array $body, $query = [];
     public $focus;
     /**
@@ -32,16 +33,15 @@ class Constructor extends \SmartDto\Dto
             default:
                 throw new \SmartApi\Exception('Invalid request type. Can only pass POST, GET, PATCH, PUT, and DELETE', 403);
         }
+        
         $arr['body'] = [];
-        $arr['service'] = $_SERVER['PATH_INFO']?? $_SERVER['REQUEST_URI'];
+        $arr['service'] = rtrim($_SERVER['REDIRECT_URL']?? '', '/');
+        $arr['type'] = strtolower($_SERVER['REQUEST_METHOD']?? 'get');
+
         if(empty($arr['service'])) {
             $exp = implode('/', array_filter(array_map(function($v) {
-                # Don't relace if input is empty
-                if(empty($v))
-                    return '';
-                return preg_replace('![^\d\A-Z_-]!i', '', $v);
-
-            }, explode('/', str_replace('api.php', '', $_SERVER['PHP_SELF'])))));
+                return preg_replace('/[^\dA-Z_-]/i','', $v);
+            }, explode('/', str_replace(['api.php', 'index.php'], ['',''],$_SERVER['PHP_SELF'])))));
             $arr['service'] = $exp;
         }
         # Process the user input data
@@ -54,6 +54,8 @@ class Constructor extends \SmartDto\Dto
         if(!empty($_SERVER['QUERY_STRING'])) {
             $strArr = [];
             parse_str($_SERVER['QUERY_STRING'], $strArr);
+            if(!empty($_SERVER['REDIRECT_URL']))
+                array_shift($strArr);
             $arr['query'] = $strArr;
         }
         return $arr;
