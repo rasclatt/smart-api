@@ -24,8 +24,9 @@ class Request extends \SmartDto\Dto
             $reg = $filter['path'];
             # See if there is a routing match
             if(preg_match("!^{$reg}!", \SmartApi\App::$dto->service, $match)) {
+                $f = $filter['callback'];
                 # Process the callback
-                $dto = (is_callable($filter['callback']))? $filter['callback']($match[0]) : [];
+                $dto = (is_callable($f) || (is_string($f) && function_exists($f)))? $f($match[0], explode('/', $match[0])) : [];
                 # Convert the DTO if the return is a SmartDto
                 if($dto instanceof \SmartDto\Dto)
                     $dto = $dto->toArray();
