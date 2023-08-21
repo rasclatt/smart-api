@@ -34,11 +34,12 @@ class App
     protected static $coreFolder;
     # Set the alternate dto class (string)
     protected static $coreDtoFolder;
-    # Create some dynamic messages to allow for custom error messages
-    public const ERROR_MSG_PERMISSION_DENIED = 'Invalid API credentials';
-    public const ERROR_MSG_INVALID = 'Invalid service';
-    public const ERROR_MSG_BROKEN = 'Services is broken';
-    public const ERROR_MSG_INVALID_INSTANCE = 'Authenticator must be instance of Api\IAuth';
+
+    public static string $ERROR_MSG_PERMISSION_DENIED = 'Invalid API credentials';
+    public static string $ERROR_MSG_INVALID = 'Invalid service';
+    public static string $ERROR_MSG_BROKEN = 'Services is broken';
+    public static string $ERROR_MSG_INVALID_INSTANCE = 'Authenticator must be instance of Api\IAuth';
+
     /**
      *	@description	Create headers for the call
      */
@@ -88,7 +89,7 @@ class App
         foreach ($this->Auth as $authenticator) {
             # Stop if not an authenticator
             if(!($authenticator instanceof Interfaces\IAuth)) {
-                throw new Exception(self::ERROR_MSG_INVALID_INSTANCE, 500);
+                throw new Exception(self::$ERROR_MSG_INVALID_INSTANCE, 500);
             }
             # Stop and mark true if valid
             if($authenticator->validate()) {
@@ -119,7 +120,7 @@ class App
         }
         # Check for valid request class
         if(!class_exists($service->class))
-            throw new Exception(self::ERROR_MSG_INVALID, 404);
+            throw new Exception(self::$ERROR_MSG_INVALID, 404);
         # Create the instance
         $obj = (isset($obj))? $obj : nReflect::instantiate($service->class);
         # Break down the items to determine whether a requestd/response DTO is available
@@ -140,11 +141,11 @@ class App
         else {
             # Stop if not validated to see the authenticated service
             if(!$valid) {
-                throw new Exception(self::ERROR_MSG_PERMISSION_DENIED, 403);
+                throw new Exception(self::$ERROR_MSG_PERMISSION_DENIED, 403);
             }
             # If valid but the service is not built properly
             elseif(!($obj instanceof \SmartApi\Init)) {
-                throw new Exception(self::ERROR_MSG_BROKEN, 500);
+                throw new Exception(self::$ERROR_MSG_BROKEN, 500);
             }
             # Run the listener for this object
             $run = $obj->listen($service->method, ($dtoExistsReq? new $dtoStringReq(self::$request) : self::$request));
@@ -170,7 +171,7 @@ class App
         foreach ($this->Auth as $authenticator) {
             # Stop if not an authenticator
             if(!($authenticator instanceof Interfaces\IAuth)) {
-                throw new Exception(self::ERROR_MSG_INVALID_INSTANCE, 500);
+                throw new Exception(self::$ERROR_MSG_INVALID_INSTANCE, 500);
             }
             # Stop and mark true if valid
             if($authenticator->validate()) {
@@ -183,7 +184,7 @@ class App
         $service = new InitRestRequest(self::$request);
         # Check for valid request class
         if(!class_exists($service->class))
-        throw new Exception(self::ERROR_MSG_INVALID, 404);
+        throw new Exception(self::$ERROR_MSG_INVALID, 404);
         # Create the instance
         $obj = (isset($obj))? $obj : nReflect::instantiate($service->class);
         # Create request and response DTO paths
@@ -203,11 +204,11 @@ class App
         else {
             # Stop if not validated to see the authenticated service
             if(!$valid) {
-                throw new Exception(self::ERROR_MSG_PERMISSION_DENIED, 403);
+                throw new Exception(self::$ERROR_MSG_PERMISSION_DENIED, 403);
             }
             # If valid but the service is not built properly
             elseif(!($obj instanceof \SmartApi\Init)) {
-                throw new Exception(self::ERROR_MSG_BROKEN, 500);
+                throw new Exception(self::$ERROR_MSG_BROKEN, 500);
             }
             # Run the listener for this object for protected (client logged in) and final (admin)
             $run = $obj->listen($service->method, ($dtoExistsReq? new $dtoStringReq($dataStore) : $dataStore));
@@ -286,3 +287,4 @@ class App
         }
     }
 }
+
