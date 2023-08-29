@@ -36,7 +36,7 @@ class Controller
             # Get the callback (string or func)
             $reg = $filter['path'];
             # If there is a matching route, then run it
-            if(preg_match("!^{$reg}$!", App::$dto->service, $match)) {
+            if(preg_match("!^{$reg}!", App::$dto->service, $match)) {
                 $f = $filter['callback'];
                 # If there is a string or callback function, try and run it,
                 # pass in matched values from path
