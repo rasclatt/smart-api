@@ -18,6 +18,8 @@ class Request extends \SmartDto\Dto
         $filters = \SmartApi\App::$controllers;
         # Set the Dto
         $dto = null;
+        # Remove slashes
+        \SmartApi\App::$dto->service = trim(\SmartApi\App::$dto->service, '/');
         # Loop filter if they exist
         foreach ($filters as $filter) {
             # Set the path/regex
