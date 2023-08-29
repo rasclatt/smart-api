@@ -37,7 +37,7 @@ abstract class Init implements IInit
         }
         else {
             # If the user is basic logged in member and the service is protected, run
-            if(App::$permission->roll === 3 && $Method->isProtected()) {
+            if(App::$permission->role === 3 && $Method->isProtected()) {
                 return $this->{$method}($this->request);
             }
         }
