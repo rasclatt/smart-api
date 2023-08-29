@@ -29,10 +29,10 @@ abstract class Init implements IInit
         # Helper/Private service
         $isInternal = $Method->isPrivate();
         # Disallow protected and final types as well as empty rolls
-        if((!$isClientService && !$isAdminService) || (App::$permission->roll === null))
+        if((!$isClientService && !$isAdminService) || (App::$permission->role === null))
             throw new \SmartApi\Exception('Permission denied.', 403);
         # If user is admin, run either way
-        if(App::$permission->roll <= 2) {
+        if(App::$permission->role <= 2) {
             return $this->{$method}($this->request);
         }
         else {
