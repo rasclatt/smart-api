@@ -47,7 +47,9 @@ class Constructor extends \SmartDto\Dto
         # Process the user input data
         if(!empty($array['input'])) {
             $strArr = [];
-            if($_SERVER['CONTENT_TYPE'] == 'application/json') {
+            $defType = 'application/json';
+            $contentType = $_SERVER['CONTENT_TYPE']?? $defType;
+            if($contentType == $defType) {
                 $arr['body'] = is_string($array['input'])? json_decode($array['input'], 1) : $array['input'];
             } else {
                 parse_str($array['input'], $strArr);
